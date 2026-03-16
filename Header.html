@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation - DE-CONNECTE</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        /* Classe pour cacher du texte tout en restant lisible par Google */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="w-full bg-transparent backdrop-blur-md sticky top-0 z-50 py-4 px-6 border-b border-gray-100">
+        <nav class="container mx-auto flex items-center justify-between" aria-label="Menu principal">
+            
+            <section class="flex items-center">
+                <a href="/" class="text-xl font-black tracking-tighter text-[#1E1E1E]" title="Accueil DE-CONNECTE">
+                    DE-CONNECTE
+                </a>
+            </section>
+
+            <ul class="hidden md:flex items-center gap-8 text-lg font-medium text-gray-600">
+                <li><a href="#" class="hover:text-[#3A3DFF] transition-colors">Accueil</a></li>
+                <li><a href="#" class="hover:text-[#3A3DFF] transition-colors">A propos</a></li>
+                <li><a href="#" class="hover:text-[#3A3DFF] transition-colors">Nos ateliers</a></li>
+                <li><a href="#" class="hover:text-[#3A3DFF] transition-colors">Contact</a></li>
+            </ul>
+
+            <section class="flex items-center">
+                <a href="#inscription" class="bg-[#112772] text-white text-lg md:text-lg -ml-8 mr-4 font-medium py-2.5 px-20 md:px-20 rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all transform active:scale-95">
+                    Inscrivez-vous
+                </a>
+                
+                <button class="ml-4 md:hidden text-[#1E1E1E]" aria-label="Ouvrir le menu de navigation">
+                    <i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>
+                    <span class="sr-only">Menu</span>
+                </button>
+            </section>
+        </nav>
+    </header>
+
+</body>
+</html>
