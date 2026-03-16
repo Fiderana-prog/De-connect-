@@ -15,7 +15,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <script src="script.js"></script>
 </head>
     <style>
         body {
@@ -94,7 +93,7 @@
 
     <main>
 
-        <div class="relative overflow-hidden h-[100vh] max-h-[100vh] mb-4">
+        <div class="relative overflow-hidden h-[100vh] max-h-[100vh] mb-4 ">
         <nav class="absolute bottom-0 flex flex-col md:flex-row gap-10 w-full z-50">  
                         <span class=" md:border-[6px] block md:border-white md:pl-24 p-2 md:bg-white  rounded-tr-3xl flex flex-col md:flex-row items-center justify-center gap-4 w-fit ">
                             <a href="#" class="group bg-gradient-to-r from-[#FF9447] to-[#FFD902]  text-white text-lg font-Poppins font-bold py-4 px-8 rounded-2xl transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-3 whitespace-nowrap">
@@ -456,5 +455,69 @@
 </footer>
 
     </main>
+<script>
+    function setActiveLink() {
+        // 1. Récupérer le nom du fichier actuel dans l'URL (ex: landingPage.html)
+        // Si l'URL finit par "/", on considère que c'est la page par défaut (index.html ou landingPage.html)
+        let currentPage = window.location.pathname.split("/").pop();
+        
+        if (currentPage === "" || currentPage === "landingPage.html") {
+            currentPage = "landingPage.html";
+        }
+
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(link => {
+            const linkHref = link.getAttribute('href');
+
+            // 2. Si le lien correspond à la page actuelle
+            if (linkHref === currentPage) {
+                link.classList.add('text-[#3A3DFF]', 'border-b-2', 'border-[#3A3DFF]');
+                link.classList.remove('text-white');
+            } else {
+                link.classList.add('text-white');
+                link.classList.remove('text-[#3A3DFF]', 'border-b-2', 'border-[#3A3DFF]');
+            }
+        });
+    }
+    const navbar = document.getElementById("navbar");
+
+        window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 50) {
+        navbar.classList.add("bg-white","text-black","backdrop-blur-md","shadow-lg","top-0");
+    } else {
+        navbar.classList.remove("bg-white","text-black","backdrop-blur-md","shadow-lg","top-0");
+    }
+
+});
+
+    // Exécuter dès que le document est prêt
+    document.addEventListener('DOMContentLoaded', setActiveLink);
+    const burgerBtn = document.getElementById('burger-btn');
+    const burgerIcon = document.getElementById('burger-icon');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isOpen = false;
+
+    burgerBtn.addEventListener('click', () => {
+        isOpen = !isOpen;
+        mobileMenu.style.maxHeight = isOpen ? mobileMenu.scrollHeight + 'px' : '0';
+        mobileMenu.setAttribute('aria-hidden', !isOpen);
+        burgerBtn.setAttribute('aria-expanded', isOpen);
+        burgerIcon.classList.toggle('fa-bars', !isOpen);
+        burgerIcon.classList.toggle('fa-xmark', isOpen);
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            isOpen = false;
+            mobileMenu.style.maxHeight = '0';
+            mobileMenu.setAttribute('aria-hidden', 'true');
+            burgerBtn.setAttribute('aria-expanded', 'false');
+            burgerIcon.classList.replace('fa-xmark', 'fa-bars');
+        });
+    });
+
+</script>
 </body>
 </html>
