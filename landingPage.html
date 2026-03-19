@@ -7,517 +7,587 @@
     <meta name="description" content="Ateliers basés sur les neurosciences pour réduire le temps d'écran.">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        Poppins: ['Poppins', 'sans-serif'],
+                        Jost:    ['Jost', 'sans-serif'],
+                        Manrope: ['Manrope', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #fff;
-        }
+        body { margin: 0; padding: 0; background-color: #fff; }
+
         input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
         .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
+            position: absolute; width: 1px; height: 1px;
+            padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
         }
+
+        /* Navbar scrollée */
+        #navbar.scrolled {
+            top: 0 !important;
+            background-color: #fff !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            backdrop-filter: blur(8px);
+        }
+        #navbar.scrolled .nav-logo,
+        #navbar.scrolled .nav-link,
+        #navbar.scrolled .burger-btn { color: #1E1E1E !important; }
+
+        /* Menu mobile : ouvert/fermé via classe JS */
+        #mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        #mobile-menu.open {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        /* Hover arrow hero btn */
+        .hero-btn:hover .arrow-icon { transform: translateX(4px); }
+        .arrow-icon { transition: transform 0.2s ease; }
+
+        /* Témoignages hover image */
+        .temoignage:hover .temo-img-r { transform: rotate(3deg); }
+        .temoignage:hover .temo-img-l { transform: rotate(-3deg); }
+        .temo-img-r, .temo-img-l { transition: transform 0.3s ease; }
     </style>
 </head>
 
-<body class="bg-white text-gray-900">
-<header id="navbar" class="fixed top-4 left-0 w-full z-50 py-2 px-6 bg-transparent">
-                <nav class="container mx-auto flex items-center justify-between" aria-label="Menu principal">
-                    
-                    <!-- Logo -->
-                    <section class="flex items-center">
-                        <a href="/" class="font-Poppins text-3xl ml-2 sm:ml-8 tracking-tighter text-white" title="Accueil DE-CONNECTE">
-                            DE-CONNECTE
-                        </a>
-                    </section>
+<body class="bg-white text-gray-900 font-Jost">
 
-                    <!-- Nav Desktop -->
-                    <ul class="hidden md:flex items-center gap-8 text-xl font-Jost font-medium text-white">
-                        <li><a href="landingPage.html" class="nav-link hover:text-[#3A3DFF] transition-colors">Accueil</a></li>
-                        <li><a href="a-propos.html" class="nav-link hover:text-[#3A3DFF] transition-colors">A propos</a></li>
-                        <li><a href="atelier.html" class="nav-link hover:text-[#3A3DFF] transition-colors">Nos ateliers</a></li>
-                        <li><a href="contact.html" class="nav-link hover:text-[#3A3DFF] transition-colors">Contact</a></li>
-                    </ul>
 
-                    <!-- CTA + Burger -->
-                    <section class="flex items-center">
-                        <a href="#inscription" class="hidden sm:inline-flex bg-[#112772] text-white text-lg md:text-lg -ml-8 mr-4 font-medium py-2.5 px-12 rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all transform active:scale-95">
-                            Inscrivez-vous
-                        </a>
+<header id="navbar" class="fixed top-4 left-0 w-full z-50 py-2 px-4 sm:px-6 transition-all duration-300">
+    <nav class="container mx-auto flex items-center justify-between" aria-label="Menu principal">
 
-                        <button class="ml-4 md:hidden text-[#1E1E1E]" 
-                                id="burger-btn"
-                                aria-label="Ouvrir le menu de navigation"
-                                aria-expanded="false"
-                                aria-controls="mobile-menu">
-                            <i id="burger-icon" class="fa-solid fa-bars text-xl" aria-hidden="true"></i>
-                            <span class="sr-only">Menu</span>
-                        </button>
-                    </section>
-                </nav>
-
-                <!-- Menu Mobile -->
-                <div id="mobile-menu"
-                    class="md:hidden overflow-hidden max-h-0 transition-all duration-300 ease-in-out"
-                    aria-hidden="true">
-                    <ul class="flex flex-col mt-4 pb-4 px-4 font-Jost font-medium text-white bg-[#112772]/90 backdrop-blur-sm rounded-2xl mx-2">
-                        <li><a href="landingPage.html" class="block py-3 px-4 hover:text-[#3A3DFF] transition-colors">Accueil</a></li>
-                        <li><a href="a-propos.html" class="block py-3 px-4 hover:text-[#3A3DFF] transition-colors">A propos</a></li>
-                        <li><a href="atelier.html" class="block py-3 px-4 hover:text-[#3A3DFF] transition-colors">Nos ateliers</a></li>
-                        <li><a href="contact.html" class="block py-3 px-4 hover:text-[#3A3DFF] transition-colors">Contact</a></li>
-                        </li>
-                    </ul>
-                </div>
-            </header>
-
-    <main>
-
-        <div class="relative overflow-hidden h-[100vh] max-h-[100vh] mb-4 ">
-        <nav class="absolute bottom-0 flex flex-col md:flex-row gap-10 w-full z-50">  
-                        <span class=" md:border-[6px] block md:border-white md:pl-24 p-2 md:bg-white  rounded-tr-3xl flex flex-col md:flex-row items-center justify-center gap-4 w-fit ">
-                            <a href="#" class="group bg-gradient-to-r from-[#FF9447] to-[#FFD902]  text-white text-lg font-Poppins font-bold py-4 px-8 rounded-2xl transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-3 whitespace-nowrap">
-                                Découvrir les ateliers
-                                <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 flex items-center justify-center"></i>
-                            </a>
-
-                            <!-- Bouton visible uniquement sur mobile -->
-                            <a href="#inscription" class="md:hidden bg-[#112772] text-white text-lg font-Poppins font-bold py-4 px-20 rounded-2xl shadow-lg flex items-center justify-center w-fit">
-                                Inscrivez-vous
-                            </a>
-                        </span>
-
-                        <aside class="hidden md:flex gap-8 sm:gap-12 text-white md:bottom- ml-[40%] -mt-14">
-                            <span class="block text-center md:text-left">
-                                <strong class="text-4xl md:text-6xl block font-Poppins font-bold">+500</strong> 
-                                <small class="text-xl ml-8 tracking-widest opacity-80 font-bold">Clients</small>
-                            </span>
-                            <span class="block text-center md:text-left">
-                                <strong class="text-4xl md:text-6xl block font-Poppins font-bold">100%</strong> 
-                                <small class="text-xl ml-8 tracking-widest opacity-80 font-bold">Confiance</small>
-                            </span>
-                        </aside>
-                    </nav>
-            
-           <figure class="absolute inset-0 z-0">
-                <img src="assets/Bg.jpg" 
-                    alt="Enfant souriant de profil" 
-                    class="w-full h-full object-cover object-[60%_center] sm:object-[80%_center] md:object-center">
-                <div class="absolute inset-0 bg-black/40 md:hidden"></div>
-            </figure>
-
-            
-
-            <section class="container mx-auto px-6 relative z-10 min-h-screen flex items-center pt-36 md:pt-24 pb-14">
-                <article class="max-w-3xl text-white">
-                    <h1 class="text-4xl md:text-8xl font-Jost font-Regular leading-tight mb-8 drop-shadow-md">
-                        Libérez le vrai <br>potentiel de votre <br> enfant
-                    </h1>
-                    <p class="text-lg sm:text-2xl font-Jost md:text-xl opacity-100 max-w-xl mb-2 w-60 md:w-full leading-relaxed">
-                        Aidez votre enfant (de 5 à 15 ans) à maîtriser son temps d'écran, à retrouver sa concentration et à libérer son plein potentiel grâce à une approche basée sur les neurosciences.
-                    </p>
-                    
-                    
-                </article>
-            </section>
+        <!-- Logo -->
+        <div class="flex items-center">
+            <a href="/" class="nav-logo font-Poppins text-2xl sm:text-3xl ml-2 sm:ml-8 tracking-tighter text-white transition-colors duration-300" title="Accueil DE-CONNECTE">
+                DE-CONNECTE
+            </a>
         </div>
 
-        <section class="relative pt-10 pb-20 bg-[#D9D9D9]/50 z-0 w-full  overflow-hidden flex items-center">
-            <section class="container mx-auto px-4"> 
-                <header class="text-center max-w-4xl mx-auto ">
-                    <h2 class="text-2xl sm:text-4xl md:text-4xl font-medium uppercase tracking-tighter leading-tight bg-gradient-to-r from-[#FF9447] via-[#321D0E] to-[#000000] bg-clip-text text-transparent">
-                        Crises, isolement, baisse des notes... <br>
-                        <span class="text-[#000000] font-Regular font-Poppins">Vous reconnaissez ces signaux ?</span>
-                    </h2>
-                </header>
-
-                <article class="grid md:grid-cols-2 gap-8 sm:gap-16 items-center mb-14 md:mb-4">
-                    <p class="relative pb-8 text-xl sm:text-2xl leading-relaxed font-medium text-black 
-                            after:content-[''] after:absolute after:bottom-0 after:left-0 
-                            after:h-[1px] after:w-64 after:bg-black">
-                        Il est biologiquement <strong class="text-[#3A3DFF] font-medium">difficile</strong> pour un adolescent de s'arrêter seul. Pourquoi ? Parce que le cortex préfrontal <span class="text-gray-500 font-bold font-Poppins">(la zone du cerveau qui contrôle les impulsions et prend les décisions)</span> 
-                        est le dernier à arriver à maturité, autour de 25 ans !
-                    </p>
-                    <figure class="hidden md:flex md:justify-center">
-                        <img src="assets/image 349.png" alt="Enfants sur smartphones" class="rounded-full w-56 h-56 sm:w-80 sm:h-80 md:w-96 md:h-96 object-cover border-1 shadow-xl">
-                    </figure>
-                </article>
-
-                <article class="grid md:grid-cols-2 gap-8 sm:gap-16 items-center">
-                    <figure class="hidden md:flex md:justify-center md:order-2 md:order-1">
-                        <img src="assets/young-boy-kid-using-mobile 1.jpg" alt="Frustration enfant écran" class="rounded-full w-56 h-56 sm:w-80 sm:h-80 md:w-96 md:h-96 object-cover border-1 ml-0 sm:-ml-12 shadow-xl">
-                    </figure>
-                    <aside class="order-1 md:order-2">
-                        <p class="text-base sm:text-2xl text-end leading-relaxed text-black font-bold font-Poppins mb-0">
-                            L'écran est devenu la seule <span class="text-[#FF9447] font-Poppins font-medium">source de détente de votre<br> enfant </span> ? 
-                            <strong class="text-gray-500 font-Poppins font-bold">Lui demander d'éteindre sa tablette provoque de l'irritabilité, de la frustration ou des crises de colère ?</strong>
-                            <br>
-                            <strong class="font-medium">Son sommeil et sa motivation en souffrent ?</strong>
-                        </p>
-                    </aside>
-                </article>
-            </section> 
-        </section>
-        <section class="py-24 ">
-            <header class="text-center mb-16 px-6">
-                <h2 class="text-2xl sm:text-4xl md:text-5xl font-medium font-Poppins mb-5 bg-gradient-to-r from-[#000000] to-[#3A3DFF] bg-clip-text text-transparent">
-                    Bonne nouvelle : le cerveau peut changer
-                </h2>
-                <p class="text-base sm:text-xl text-black font-medium font-Poppins">
-                    De la distraction au "Cerveau Actif"
-                </p>
-            </header>
-
-            <article class="container mx-auto ">
-                <figure class="relative h-[350px] sm:h-[500px] md:h-[600px] overflow-hidden md:rounded-[10px] shadow-2xl group">
-                    <img src="assets/Rectangle 7.jpg" alt="Épanouissement enfant" class="w-full h-full object-cover object-right sm:object-center">
-                    <figcaption class="absolute inset-0 w-[100%] sm:w-[75%] md:w-[62%] bg-black/60 flex md:rounded-r-[5%] flex-col justify-center p-4 sm:p-10 md:p-20 text-white">
-                        <h3 class="text-4xl sm:text-4xl md:text-7xl font-Regular font-Jost mb-6 sm:mb-16 md:mb-32 border-l-8 border-orange-500 pl-4 sm:pl-8 leading-none">REPRENDRE <br>LE CONTROLE</h3>
-                        <p class="max-w-2xl text-lg sm:text-xl md:text-2xl font-Regular font-Poppins mb-4 opacity-90">
-                            Le cerveau de nos enfants est d'une <span class="text-[#FF9447] font-medium">plasticité extraordinaire</span>: Il se remodèle en permanence. Ne laissons pas le mode "spectateur" réduire leur attention. <br>
-                            <span class="block text-xs sm:text-base md:text-xl font-medium text-white mt-4 sm:mt-8">
-                                Agissons aujourd'hui sur les écrans pour sauver les cerveaux de demain
-                            </span>
-                        </p>
-                        <a href="#" class="bg-[#FF9447] w-fit px-6 sm:px-12 py-2.5 rounded-2xl font-medium font-Poppins text-base sm:text-xl md:text-2xl">Inscrivez-vous</a>
-                    </figcaption>
-                </figure>
-            </article>
-        </section>
-
-        <section class="py-24 bg-[#FAFAFF] w-full">
-
-    <section class="container mx-auto px-6">
-        
-            <header class="mb-16 flex justify-between items-end border-l-8 pl-4 sm:pl-8 pt-8 pr-4 sm:pr-20 border-[#FF9447] pb-1">
-                <aside>
-                    <h2 class="text-3xl sm:text-6xl font-light font-Jost leading-none">Temoignages</h2>
-                    <p class="text-base sm:text-lg mt-2 font-light font-Jost">
-                        <span class="text-[#3A3DFF] font-medium font-Jost">+500 clients</span> nous font confiance
-                    </p>
-                </aside>
-                <img src="assets/Star 1.png" 
-                    alt="Étoile de notation" 
-                    class="h-[90px] w-auto hidden md:block object-contain drop-shadow-[0_0_0_#3A3DFF] brightness-0 saturate-100 invert-[23%] sepia-[86%] saturate-[5871%] hue-rotate-[234%] brightness-[96%] contrast-[103%]">
-            </header>
-
-            <ul class="grid gap-12 justify-content items-center">
-                <li class="flex flex-col md:flex-row gap-4 sm:gap-8 items-start p-4 sm:p-8 border-b-2 border-[#000000] hover:bg-orange-50 transition group">
-                    <img src="assets/Ellipse 5.png" alt="Portrait Marc" class="w-20 h-20 sm:w-32 sm:h-32 rounded-full object-cover shadow-lg group-hover:rotate-3 transition">
-                    <article class="flex-1">
-                        <h4 class="text-base sm:text-xl font-medium font-Poppins text-gray-800 mb-2">Monsieur le Directeur d'une École Partenaire</h4>
-                        <p class="text-sm sm:text-base text-gray-600 font-Regular font-Poppins leading-relaxed">"En tant qu'éducateur, je vois quotidiennement l'impact dévastateur de la surexposition aux écrans sur l'attention des élèves. L'approche de l'Institut Dé-Connecté apporte une réponse concrète et nécessaire. C'est une véritable vision d'avenir pour notre système éducatif : 
-                            préparer les adultes de demain à être maîtres de la technologie plutôt que d'en être dépendants. 
-                            C'est un partenaire indispensable pour la réussite de nos jeunes."
-                        </p>
-                    </article>
-                </li>
-                <li class="flex flex-col md:flex-row gap-4 sm:gap-8 items-start border-b-2 border-[#000000] p-4 sm:p-8 hover:bg-orange-50 transition group">
-                    <img src="assets/Ellipse 6.png" alt="Portrait Marc" class="w-20 h-20 sm:w-32 sm:h-32 rounded-full object-cover shadow-lg group-hover:rotate-3 transition">
-                    <article class="flex-1">
-                        <h4 class="text-base sm:text-xl font-medium font-Poppins text-gray-800 mb-2">Fitahiana, 14 ans (Participant aux ateliers)</h4>
-                        <p class="text-sm sm:text-base text-gray-600 font-Regular font-Poppins leading-relaxed">"Avant, je me sentais souvent fatigué et sans motivation. Ce que j'ai préféré, ce sont les vidéos de motivation que l'on regarde et analyse. Aujourd'hui, après chaque projection, je me sens boosté et prêt à relever tous les défis. 
-                            J'ai appris que mon cerveau est un outil puissant et c'est moi qui ai repris les commandes."
-                        </p>
-                    </article>
-                </li>
-                <li class="flex flex-col md:flex-row gap-4 sm:gap-8 items-start border-b-2 border-[#000000] p-4 sm:p-8 hover:bg-indigo-50 transition mb-32 group">
-                    <img src="assets/Ellipse 7.png" alt="Portrait Jean-Pierre" class="w-20 h-20 sm:w-32 sm:h-32 rounded-full object-cover shadow-lg group-hover:-rotate-3 transition">
-                    <article class="flex-1">
-                        <h4 class="text-base sm:text-xl font-medium font-Poppins text-gray-800 mb-2">Elena, maman de Diary (12 ans)</h4>
-                        <p class="text-sm sm:text-base text-gray-600 font-Regular font-Poppins leading-relaxed">"Le changement a été radical. Non seulement les résultats scolaires de Diary se sont améliorés grâce aux techniques de concentration apprises durant les ateliers, mais il a surtout retrouvé le goût des activités réelles. Alors qu'il passait tout son temps sur les jeux vidéo, il s'intéresse aujourd'hui passionnément à la guitare. 
-                            Il a retrouvé une discipline et une joie de vivre que nous pensions perdues. C'est une renaissance pour lui."
-                        </p>
-                        <div id="navbar-placeholder"></div>
-                    </article>
-                </li>
-            </ul>
-            
-        </section>
-    </section>
-<section id="inscription" class="bg-[#112772] text-white py-24">
-  <div class="container mx-auto px-6">
-    
-    <div class="grid md:grid-cols-2 gap-32 items-center max-w-6xl">
-
-      <!-- Texte -->
-      <div>
-        <h2 class="text-3xl md:text-4xl font-poppins font-bold uppercase mb-8 leading-tight">
-          COMMENCER DES AUJOURD'HUI !!
-        </h2>
-
-        <p class="text-lg mb-8 opacity-90">
-          La réussite de nos enfants est un travail d'équipe. Téléchargez gratuitement notre outil
-          "Charte Familiale : Cerveau en pleine forme !" et découvrez comment mettre en place des
-          rituels simples :
-        </p>
-
-        <ul class="space-y-4 mb-12 opacity-90">
-          <li class="flex items-start gap-3">
-            <span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>
-            Créer des "Zones de paix" (0 écran).
-          </li>
-
-          <li class="flex items-start gap-3">
-            <span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>
-            Instaurer le couvre-feu numérique pour un meilleur sommeil.
-          </li>
-
-          <li class="flex items-start gap-3">
-            <span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>
-            Le "Défi des parents" pour montrer l'exemple.
-          </li>
+        <ul class="hidden md:flex items-center gap-6 lg:gap-8 text-lg lg:text-xl font-Jost font-medium text-white">
+            <li><a href="/" class="nav-link hover:text-[#3A3DFF] transition-colors duration-200">Accueil</a></li>
+            <li><a href="#" class="nav-link hover:text-[#3A3DFF] transition-colors duration-200">A propos</a></li>
+            <li><a href="atelier.html" class="nav-link hover:text-[#3A3DFF] transition-colors duration-200">Nos ateliers</a></li>
+            <li><a href="#" class="nav-link hover:text-[#3A3DFF] transition-colors duration-200">Contact</a></li>
         </ul>
 
-        <button class="bg-[#FF9447] hover:bg-[#e8853f] text-white font-medium py-3 px-8 rounded-full transition-colors mb-16">
-          Recevoir une charte familiale gratuite
-        </button>
+        <!-- CTA + Burger -->
+        <div class="flex items-center">
+            <a href="#inscription"
+               class="hidden sm:inline-flex bg-[#112772] text-white text-base md:text-lg font-medium py-2.5 px-6 lg:px-12 rounded-full shadow-md hover:shadow-lg hover:brightness-110 transition-all transform active:scale-95 whitespace-nowrap">
+                Inscrivez-vous
+            </a>
 
-        <div class="flex gap-16">
-          <div>
-            <div class="text-5xl md:text-6xl font-poppins font-bold">+500</div>
-            <div class="text-lg tracking-widest font-medium mt-1">Clients</div>
-          </div>
-
-          <div>
-            <div class="text-5xl md:text-6xl font-poppins font-bold">100%</div>
-            <div class="text-lg tracking-widest font-medium mt-1">Confiances</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Formulaire -->
-      <div class="bg-transparent ml-96 w-full max-w-md">
-        <form class="space-y-8">
-
-          <div>
-            <input
-              type="text"
-              placeholder="Nom de parents ou responsable :"
-              class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors"
-            />
-          </div>
-
-          <div>
-            <input
-              type="email"
-              placeholder="Adresse email"
-              class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors"
-            />
-          </div>
-
-          <div>
-            <input
-              type="tel"
-              placeholder="Numéro de téléphone"
-              class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors"
-            />
-          </div>
-
-          <div>
-            <input
-              type="text"
-              placeholder="Nom de l'enfant :"
-              class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors"
-            />
-          </div>
-
-          <div class="grid grid-cols-2 gap-8">
-            <div>
-              <input
-                type="text"
-                placeholder="Age de l'enfant"
-                class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors"
-              />
-            </div>
-
-            <div>
-              <input
-                type="text"
-                placeholder="Classe"
-                class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors"
-              />
-            </div>
-          </div>
-
-          <div class="pt-4 flex justify-center">
-            <button
-              type="submit"
-              class="bg-gradient-to-r from-[#FF9447] to-[#FFD902] text-white font-bold py-3 px-12 rounded-full shadow-lg hover:scale-105 transition-transform"
-            >
-              Inscrivez-vous
+            <button id="burger-btn"
+                    class="burger-btn ml-4 md:hidden text-white transition-colors duration-300"
+                    aria-label="Ouvrir le menu de navigation"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu">
+                <!-- Icône Bars -->
+                <svg id="icon-bars" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                <!-- Icône X (cachée par défaut) -->
+                <svg id="icon-x" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <span class="sr-only">Menu</span>
             </button>
-          </div>
+        </div>
+    </nav>
 
-        </form>
-      </div>
-
+    <!-- Menu Mobile -->
+    <div id="mobile-menu" aria-hidden="true">
+        <ul class="flex flex-col mt-4 pb-4 px-4 font-Jost font-medium text-white bg-[#112772]/90 backdrop-blur-sm rounded-2xl mx-2">
+            <li><a href="/"  class="mobile-link block py-3 px-4 hover:text-[#3A3DFF] transition-colors">Accueil</a></li>
+            <li><a href="#"  class="mobile-link block py-3 px-4 hover:text-[#3A3DFF] transition-colors">A propos</a></li>
+            <li><a href="#"  class="mobile-link block py-3 px-4 hover:text-[#3A3DFF] transition-colors">Nos ateliers</a></li>
+            <li><a href="#"  class="mobile-link block py-3 px-4 hover:text-[#3A3DFF] transition-colors">Contact</a></li>
+        </ul>
     </div>
-  </div>
+</header>
+
+<main>
+
+<!-- ═══════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<div class="relative overflow-hidden h-screen max-h-screen mb-4">
+
+    <!-- Barre bas de page -->
+    <nav class="absolute bottom-0 flex flex-col md:flex-row gap-4 md:gap-10 w-full z-50 pb-4 md:pb-0">
+
+        <span class="md:border-[6px] block md:border-white md:pl-16 lg:pl-24 p-3 md:bg-white md:rounded-tr-3xl flex flex-col md:flex-row items-center justify-center gap-4 w-full md:w-fit">
+            <a href="#" class="hero-btn group bg-gradient-to-r from-[#FF9447] to-[#FFD902] text-white text-base sm:text-lg font-Poppins font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-2xl transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-3 whitespace-nowrap w-fit mx-auto md:mx-0">
+                Découvrir les ateliers
+                <svg class="arrow-icon h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+            </a>
+
+            <a href="#inscription" class="md:hidden bg-[#112772] text-white text-base font-Poppins font-bold py-3 px-12 rounded-2xl shadow-lg flex items-center justify-center w-fit mx-auto">
+                Inscrivez-vous
+            </a>
+        </span>
+
+        <aside class="hidden md:flex gap-8 lg:gap-12 text-white ml-[35%] lg:ml-[40%] -mt-14">
+            <span class="block">
+                <strong class="text-4xl md:text-5xl lg:text-6xl block font-Poppins font-bold">+500</strong>
+                <small class="text-base lg:text-xl ml-4 lg:ml-8 tracking-widest opacity-80 font-bold font-Poppins">Clients</small>
+            </span>
+            <span class="block">
+                <strong class="text-4xl md:text-5xl lg:text-6xl block font-Poppins font-bold">100%</strong>
+                <small class="text-base lg:text-xl ml-4 lg:ml-8 tracking-widest opacity-80 font-bold font-Poppins">Confiance</small>
+            </span>
+        </aside>
+    </nav>
+
+    <figure class="absolute inset-0 z-0">
+        <img src="assets/Bg.jpg"
+             alt="Enfant souriant de profil"
+             class="w-full h-full object-cover object-[60%_center] sm:object-[80%_center] md:object-center">
+        <div class="absolute inset-0 bg-black/50 md:bg-black/0"></div>
+    </figure>
+
+    <!-- Contenu Hero -->
+    <section class="container mx-auto px-4 sm:px-6 relative z-10 min-h-screen flex items-center pt-28 sm:pt-32 md:pt-24 pb-32 md:pb-14">
+        <article class="max-w-xs sm:max-w-xl md:max-w-3xl text-white">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-Jost font-normal leading-tight mb-6 sm:mb-8 drop-shadow-md">
+                Libérez le vrai <br>
+                potentiel de votre <br>
+                enfant
+            </h1>
+            <p class="text-base sm:text-xl md:text-xl opacity-100 max-w-xs sm:max-w-sm md:max-w-xl font-Jost leading-relaxed">
+                Aidez votre enfant (de 5 à 15 ans) à maîtriser son temps d'écran, à retrouver sa concentration et à libérer son plein potentiel grâce à une approche basée sur les neurosciences.
+            </p>
+        </article>
+    </section>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     SECTION PROBLÈME
+════════════════════════════════════════ -->
+<section class="relative pt-10 pb-20 bg-[#D9D9D9]/50 z-0 w-full overflow-hidden flex items-center">
+    <div class="container mx-auto px-4 sm:px-6">
+
+        <header class="text-center max-w-5xl mx-auto mb-10 sm:mb-14">
+            <h2 class="text-xl sm:text-3xl md:text-4xl font-medium font-Poppins  tracking-tighter leading-tight bg-gradient-to-r from-[#FF9447] via-[#321D0E] to-[#000000] bg-clip-text text-transparent">
+                Fatique oculaire, ISOLEMENT, Maux de Tête fréquent, baisse des performances scolaires...  <br>
+                <span class="text-[#000000] font-normal font-Poppins">Vous reconnaissez ces signaux ?</span>
+            </h2>
+        </header>
+
+        <!-- Ligne 1 -->
+        <article class="grid md:grid-cols-2 gap-6 sm:gap-16 items-center mb-10 md:mb-4">
+            <p class="relative pb-8 text-lg sm:text-xl md:text-2xl leading-relaxed font-medium text-black font-Poppins
+                       after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-48 sm:after:w-64 after:bg-black">
+                Il est biologiquement <strong class="text-[#3A3DFF] font-medium">difficile</strong> pour un adolescent de s'arrêter seul. Pourquoi ? Parce que le cortex préfrontal
+                <span class="text-gray-500 font-medium font-Poppins">(la zone du cerveau qui contrôle les impulsions et prend les décisions)</span>
+                est le dernier à arriver à maturité, autour de 25 ans !
+            </p>
+            <figure class="hidden md:flex md:justify-center">
+                <img src="assets/image 349.png"
+                     alt="Enfants sur smartphones"
+                     class="rounded-full w-64 h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-96 object-cover shadow-xl">
+            </figure>
+        </article>
+
+        <!-- Ligne 2 -->
+        <article class="grid md:grid-cols-2 gap-6 sm:gap-16 items-center">
+            <figure class="hidden md:flex md:justify-center md:order-1">
+                <img src="assets/young-boy-kid-using-mobile 1.jpg"
+                     alt="Frustration enfant écran"
+                     class="rounded-full w-64 h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-96 object-cover shadow-xl">
+            </figure>
+            <aside class="md:order-2">
+                <p class="text-base sm:text-xl md:text-2xl text-left md:text-right leading-relaxed text-black font-medium font-Poppins">
+                    L'écran est devenu la seule <span class="text-[#FF9447] font-medium">source de détente de votre enfant</span> ?
+                    <strong class="text-gray-500 font-medium">Lui demander d'éteindre sa tablette provoque de l'irritabilité, de la frustration ou des crises de colère ?</strong>
+                    <br>
+                    <strong class="font-medium">Son sommeil et sa motivation en souffrent ?</strong>
+                </p>
+            </aside>
+        </article>
+    </div>
 </section>
 
-    <footer class="bg-white py-8 px-6 font-sans">
-    <section class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 items-start">
-        
-        <aside class="space-y-6">
-            <h2 class="text-2xl font-black tracking-tighter">DE-CONNECTE</h2>
-            
-            <nav class="flex gap-6 items-center" aria-label="Liens vers nos réseaux sociaux">
-                <a href="https://facebook.com/ton-lien" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="text-[#FF9447] hover:text-orange-600 hover:scale-110 transition-all duration-300">
-                    <i class="fa-brands fa-facebook text-5xl"></i>
+
+<!-- ═══════════════════════════════════════
+     SECTION CERVEAU
+════════════════════════════════════════ -->
+<section class="py-16 sm:py-24">
+
+    <header class="text-center mb-10 sm:mb-16 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-4xl md:text-5xl font-Regular font-Poppins mb-4 sm:mb-5 bg-gradient-to-r from-[#000000] to-[#3A3DFF] bg-clip-text text-transparent">
+            Bonne nouvelle : le cerveau peut changer
+        </h2>
+        <p class="text-base sm:text-xl text-black font-medium font-Poppins">
+            De la distraction au "Cerveau Actif"
+        </p>
+    </header>
+
+    <article class="container mx-auto px-0 sm:px-4 md:px-6">
+        <figure class="relative h-[300px] sm:h-[440px] md:h-[560px] lg:h-[600px] overflow-hidden md:rounded-[10px] shadow-2xl">
+            <img src="assets/Group 18.jpg"
+                 alt="Épanouissement enfant"
+                 class="w-full h-full object-cover object-right sm:object-center">
+            <figcaption class="absolute inset-0 w-full sm:w-[80%] md:w-[62%] bg-black/60 flex md:rounded-r-[5%] flex-col justify-center p-5 sm:p-10 md:p-14 lg:p-20 text-white">
+                <h3 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-normal font-Jost mb-6 sm:mb-10 md:mb-20 lg:mb-32 border-l-8 border-orange-500 pl-4 sm:pl-8 leading-none">
+                    REPRENDRE <br>LE CONTROLE
+                </h3>
+                <p class="max-w-2xl text-sm sm:text-lg md:text-xl lg:text-2xl font-Poppins mb-4 opacity-90">
+                    Le cerveau de nos enfants est d'une <span class="text-[#FF9447] font-medium">plasticité extraordinaire</span> : il se remodèle en permanence en fonction de son environnement. C’est grâce à la plasticité cérébrale : les connexions entre les neurones se créent, se renforcent ou disparaissent selon ce qu’on fait tous les jours.
+                    <span class="block text-xs sm:text-sm md:text-xl lg:text-xl font-medium text-white mt-4 sm:mt-6">
+                        Agissons aujourd'hui sur les écrans pour sauver les cerveaux de demain
+                    </span>
+                </p>
+                <a href="#inscription" class="bg-[#FF9447] w-fit px-5 sm:px-10 py-2 sm:py-2.5 rounded-2xl font-medium font-Poppins text-sm sm:text-lg md:text-xl lg:text-2xl hover:brightness-110 transition-all">
+                    Inscrivez-vous
+                </a>
+            </figcaption>
+        </figure>
+    </article>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     TÉMOIGNAGES
+════════════════════════════════════════ -->
+<section class="py-16 sm:py-24 bg-[#FAFAFF] w-full">
+    <div class="container mx-auto px-4 sm:px-6">
+
+        <header class="mb-10 sm:mb-16 flex justify-between items-end border-l-8 pl-4 sm:pl-8 pt-6 sm:pt-8 pr-4 sm:pr-16 md:pr-20 border-[#FF9447] pb-1">
+            <aside>
+                <h2 class="text-2xl sm:text-4xl md:text-6xl font-light font-Jost leading-none">Temoignages</h2>
+                <p class="text-sm sm:text-lg mt-2 font-light font-Jost">
+                    <span class="text-[#3A3DFF] font-medium font-Jost">+500 clients</span> nous font confiance
+                </p>
+            </aside>
+            <div class="hidden md:flex h-[70px] lg:h-[90px] items-center">
+                <svg viewBox="0 0 80 80" class="h-full w-auto" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="40,5 49,30 76,30 54,48 62,74 40,57 18,74 26,48 4,30 31,30" fill="#3A3DFF"/>
+                </svg>
+            </div>
+        </header>
+
+        <ul class="grid gap-8 sm:gap-12">
+
+            <!-- Témoignage 1 -->
+            <li class="temoignage flex flex-col sm:flex-row gap-4 sm:gap-8 items-start p-4 sm:p-8 border-b-2 border-[#000000] hover:bg-orange-50 transition-colors">
+                <img src="assets/Ellipse 5.png"
+                     alt="Portrait Directeur"
+                     class="temo-img-r w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover shadow-lg flex-shrink-0">
+                <article class="flex-1">
+                    <h4 class="text-sm sm:text-lg md:text-xl font-medium font-Poppins text-gray-800 mb-2">
+                        Mr RAZAFIMAHARY Tsiry (Mr le directeur de l’ecole partenaire)
+                    </h4>
+                    <p class="text-sm sm:text-base text-gray-600 font-Poppins leading-relaxed">
+                        "En tant qu'éducateur, je vois quotidiennement l'impact dévastateur de la surexposition aux écrans sur l'attention des élèves. L'approche de l'Institut Dé-Connecté apporte une réponse concrète et nécessaire. C'est une véritable vision d'avenir pour notre système éducatif :
+                        préparer les adultes de demain à être maîtres de la technologie plutôt que d'en être dépendants.
+                        C'est un partenaire indispensable pour la réussite de nos jeunes."
+                    </p>
+                </article>
+            </li>
+
+            <!-- Témoignage 2 -->
+            <li class="temoignage flex flex-col sm:flex-row gap-4 sm:gap-8 items-start p-4 sm:p-8 border-b-2 border-[#000000] hover:bg-orange-50 transition-colors">
+                <img src="assets/Ellipse 6.png"
+                     alt="Portrait Fitahiana"
+                     class="temo-img-r w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover shadow-lg flex-shrink-0">
+                <article class="flex-1">
+                    <h4 class="text-sm sm:text-lg md:text-xl font-medium font-Poppins text-gray-800 mb-2">
+                        Fitahiana, 14 ans (Participant aux ateliers)
+                    </h4>
+                    <p class="text-sm sm:text-base text-gray-600 font-Poppins leading-relaxed">
+                        "Avant, je me sentais souvent fatigué et sans motivation. Ce que j'ai préféré, ce sont les vidéos de motivation que l'on regarde et analyse. Aujourd'hui, après chaque projection, je me sens boosté et prêt à relever tous les défis.
+                        J'ai appris que mon cerveau est un outil puissant et c'est moi qui ai repris les commandes."
+                    </p>
+                </article>
+            </li>
+
+            <!-- Témoignage 3 -->
+            <li class="temoignage flex flex-col sm:flex-row gap-4 sm:gap-8 items-start p-4 sm:p-8 border-b-2 border-[#000000] hover:bg-indigo-50 transition-colors mb-16 sm:mb-32">
+                <img src="assets/Ellipse 7.png"
+                     alt="Portrait Elena"
+                     class="temo-img-l w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover shadow-lg flex-shrink-0">
+                <article class="flex-1">
+                    <h4 class="text-sm sm:text-lg md:text-xl font-medium font-Poppins text-gray-800 mb-2">
+                        Elena, maman de Diary (12 ans)
+                    </h4>
+                    <p class="text-sm sm:text-base text-gray-600 font-Poppins leading-relaxed">
+                        "Le changement a été radical. Non seulement les résultats scolaires de Diary se sont améliorés grâce aux techniques de concentration apprises durant les ateliers, mais il a surtout retrouvé le goût des activités réelles. Alors qu'il passait tout son temps sur les jeux vidéo, il s'intéresse aujourd'hui passionnément à la guitare.
+                        Il a retrouvé une discipline et une joie de vivre que nous pensions perdues. C'est une renaissance pour lui."
+                    </p>
+                </article>
+            </li>
+
+        </ul>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     INSCRIPTION
+════════════════════════════════════════ -->
+<section id="inscription" class="bg-[#112772] text-white py-16 sm:py-24">
+    <div class="container mx-auto px-4 sm:px-6">
+        <div class="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-start max-w-6xl mx-auto">
+
+            <!-- Texte gauche -->
+            <div>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-Poppins uppercase mb-6 sm:mb-8 leading-tight">
+                    COMMENCER DES AUJOURD'HUI !!
+                </h2>
+
+                <p class="text-base sm:text-lg text-white/50 font-Poppins mb-6 sm:mb-8 opacity-90 leading-relaxed">
+                    La réussite de nos enfants est un travail d'équipe. Téléchargez gratuitement notre outil
+                    "Charte Familiale : Cerveau en pleine forme !" et découvrez comment mettre en place des rituels simples :
+                </p>
+
+                <ul class="space-y-3 sm:space-y-4 mb-8 sm:mb-12 opacity-90 ">
+                    <li class="flex items-start gap-3 text-sm sm:text-base font-medium font-Poppins">
+                        <span class="mt-2 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>
+                        Créer des "Zones de paix" (0 écran).
+                    </li>
+                    <li class="flex items-start gap-3 text-sm sm:text-base font-medium font-Poppins">
+                        <span class="mt-2 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>
+                        Instaurer le couvre-feu numérique pour un meilleur sommeil.
+                    </li>
+                    <li class="flex items-start gap-3 text-sm sm:text-base font-medium font-Poppins">
+                        <span class="mt-2 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>
+                        Le "Défi des parents" pour montrer l'exemple.
+                    </li>
+                </ul>
+
+                <button class="bg-[#FF9447] hover:bg-[#e8853f] text-white font-medium font-Poppins py-3 px-6 sm:px-8 rounded-full transition-colors mb-10 sm:mb-16 text-sm sm:text-base">
+                    Recevoir une charte familiale gratuite
+                </button>
+
+                <div class="flex gap-10 sm:gap-16">
+                    <div>
+                        <div class="text-4xl sm:text-5xl md:text-6xl font-Poppins font-bold">+500</div>
+                        <div class="text-sm sm:text-lg tracking-widest font-medium font-Poppins mt-1">Clients</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl sm:text-5xl md:text-6xl font-Poppins font-bold">100%</div>
+                        <div class="text-sm sm:text-lg tracking-widest font-medium font-Poppins mt-1">Confiances</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire -->
+            <div class="w-full font-medium font-Poppins">
+                <form class="space-y-6 sm:space-y-8">
+                    <div>
+                        <input type="text" placeholder="Nom de parents ou responsable :"
+                               class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors text-sm sm:text-base">
+                    </div>
+                    <div>
+                        <input type="email" placeholder="Adresse email"
+                               class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors text-sm sm:text-base">
+                    </div>
+                    <div>
+                        <input type="tel" placeholder="Numéro de téléphone"
+                               class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors text-sm sm:text-base">
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Nom de l'enfant :"
+                               class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors text-sm sm:text-base">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 sm:gap-8">
+                        <div>
+                            <input type="text" placeholder="Age de l'enfant"
+                                   class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors text-sm sm:text-base">
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Classe"
+                                   class="w-full bg-transparent border-b border-white/30 py-3 px-2 text-white placeholder:text-white/70 focus:outline-none focus:border-[#FF9447] transition-colors text-sm sm:text-base">
+                        </div>
+                    </div>
+                    <div class="pt-4 flex justify-center">
+                        <button type="submit"
+                                class="bg-gradient-to-r from-[#FF9447] to-[#FFD902] text-white font-bold py-3 px-8 sm:px-12 rounded-full shadow-lg hover:scale-105 transition-transform text-sm sm:text-base">
+                            Inscrivez-vous
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="bg-white py-8 px-4 sm:px-6 font-sans">
+    <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 items-start">
+
+        <!-- Brand -->
+        <aside class="space-y-5 sm:space-y-6">
+            <h2 class="text-xl sm:text-4xl  tracking-tighter font-Poppins">DE-CONNECTE</h2>
+
+            <nav class="flex gap-4 sm:gap-5 items-center flex-wrap" aria-label="Réseaux sociaux">
+                <!-- Facebook -->
+                <a href="https://facebook.com/ton-lien" target="_blank" rel="noopener noreferrer"
+                   class="text-[#FF9447] hover:text-orange-600 hover:scale-110 transition-all duration-300">
+                    <svg class="h-10 w-10 sm:h-12 sm:w-12" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
                     <span class="sr-only">Facebook</span>
                 </a>
-
-                <a href="https://wa.me/ton-numero" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="text-[#FF9447] hover:text-orange-600 hover:scale-110 transition-all duration-300">
-                    <i class="fa-brands fa-square-whatsapp text-5xl"></i>
+                <!-- WhatsApp -->
+                <a href="https://wa.me/ton-numero" target="_blank" rel="noopener noreferrer"
+                   class="text-[#FF9447] hover:text-orange-600 hover:scale-110 transition-all duration-300">
+                    <svg class="h-10 w-10 sm:h-12 sm:w-12" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
                     <span class="sr-only">WhatsApp</span>
                 </a>
-
-                <a href="https://instagram.com/ton-lien" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="text-[#FF9447] hover:text-orange-600 hover:scale-110 transition-all duration-300">
-                    <i class="fa-brands fa-square-instagram text-5xl"></i>
+                <!-- Instagram -->
+                <a href="https://instagram.com/ton-lien" target="_blank" rel="noopener noreferrer"
+                   class="text-[#FF9447] hover:text-orange-600 hover:scale-110 transition-all duration-300">
+                    <svg class="h-10 w-10 sm:h-12 sm:w-12" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                    </svg>
                     <span class="sr-only">Instagram</span>
                 </a>
-
-                <a href="https://linkedin.com/in/ton-lien" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="text-[#FF9447] hover:text-orange-600 hover:scale-110 transition-all duration-300">
-                    <i class="fa-brands fa-linkedin text-5xl"></i>
+                <!-- LinkedIn -->
+                <a href="https://linkedin.com/in/ton-lien" target="_blank" rel="noopener noreferrer"
+                   class="text-[#FF9447] hover:text-orange-600 hover:scale-110 transition-all duration-300">
+                    <svg class="h-10 w-10 sm:h-12 sm:w-12" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
                     <span class="sr-only">LinkedIn</span>
                 </a>
             </nav>
-            <p class="text-lg text-gray-500 max-w-xs leading-relaxed font-Regular">
-                Ensemble, nous pouvons réveiller le Génie qui dort en chaque enfant. <br> <span class="text-[#3A3DFF] font-medium cursor-pointer">"Approche innovative de l'Institut Dé-connecté"</span>
+
+            <p class="text-sm sm:text-base lg:text-lg text-gray-500 max-w-xs leading-relaxed font-Poppins">
+                Ensemble, nous pouvons réveiller le Génie qui dort en chaque enfant. <br>
+                <span class="text-[#3A3DFF] font-medium cursor-pointer">"Approche innovative de l'Institut Dé-connecté"</span>
             </p>
         </aside>
 
-        <nav class="space-y-4">
-            <h3 class="font-bold text-gray-900 uppercase text-lg tracking-widest">Liens utiles</h3>
-            <ul class="space-y-3 font-Regular text-black text-xl">
-                <li><a href="#" class="hover:text-[#3A3DFF] transition">Accueil</a></li>
-                <li><a href="#" class="hover:text-[#3A3DFF] transition">A propos</a></li>
-                <li><a href="#" class="hover:text-[#3A3DFF] transition">Nos ateliers</a></li>
-                <li><a href="#" class="hover:text-[#3A3DFF] transition">Contact</a></li>
+        <!-- Liens utiles -->
+        <nav class="space-y-3 sm:space-y-4 font-Jost">
+            <h3 class="font-bold text-gray-900 uppercase text-sm sm:text-base lg:text-lg tracking-widest ">Liens utiles</h3>
+            <ul class="space-y-2 sm:space-y-3 text-black text-base sm:text-lg lg:text-xl font-Poppins">
+                <li><a href="#" class="hover:text-[#3A3DFF] transition-colors">Accueil</a></li>
+                <li><a href="#" class="hover:text-[#3A3DFF] transition-colors">A propos</a></li>
+                <li><a href="#" class="hover:text-[#3A3DFF] transition-colors">Nos ateliers</a></li>
+                <li><a href="#" class="hover:text-[#3A3DFF] transition-colors">Contact</a></li>
             </ul>
         </nav>
 
-        <article class="space-y-6 ml-0 sm:-ml-20">
-            <h3 class="text-lg sm:text-xl md:text-2xl font-medium text-[#1E1E1E] leading-tight">
+        <!-- CTA Footer -->
+        <article class="space-y-4 sm:space-y-6">
+            <h3 class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium font-Poppins text-[#1E1E1E] leading-tight font-Poppins">
                 Offrez à votre enfant les clés de sa réussite numérique. Réservez sa place pour la prochaine session et retrouvez la sérénité à la maison.
             </h3>
-            <hr class="border-black w-full sm:w-96">
-            <p class="text-sm text-gray-500 font-medium">
-                Les places sont limitées pour garantir un suivi de qualité
-            </p>
-            <div class="flex justify-end">
-                <a href="#" class="bg-gradient-to-r from-[#FF9447] to-[#FFE100] text-white font-semibold text-xl py-3 px-12 rounded-2xl shadow-lg hover:shadow-xl hover:brightness-110 transition transform hover:-translate-y-1 inline-block">
+            <hr class="border-black w-full sm:w-64 md:w-72 lg:w-96">
+            <div class="flex justify-start sm:justify-end">
+                <a href="#inscription"
+                   class="bg-gradient-to-r from-[#FF9447] to-[#FFE100] text-white font-semibold text-base sm:text-lg lg:text-xl py-3 px-8 sm:px-12 rounded-2xl shadow-lg hover:shadow-xl hover:brightness-110 transition-all transform hover:-translate-y-1 inline-block">
                     Inscrivez-vous
                 </a>
             </div>
+            <p class="text-xs sm:text-sm text-gray-500 font-medium font-Poppins">
+                Les places sont limitées pour garantir un suivi de qualité
+            </p>
         </article>
-    </section>
+    </div>
 
-    <section class="container mx-auto mt-2 pt-8">
-        <div class="flex items-center gap-2 text-black text-lg">
-            <i class="fa-solid fa-location-dot w-6 h-6 flex items-center justify-center" aria-hidden="true"></i>
+    <!-- Adresse -->
+    <div class="container mx-auto mt-4 sm:mt-6 pt-6 sm:pt-8 border-t border-gray-100">
+        <div class="flex items-center gap-2 text-black text-sm sm:text-base lg:text-lg">
+            <svg class="h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
             <span class="font-light">Antananarivo - Madagascar</span>
         </div>
-    </section>
+    </div>
 </footer>
 
-    </main>
+</main>
+
+
 <script>
-    function setActiveLink() {
-        // 1. Récupérer le nom du fichier actuel dans l'URL (ex: landingPage.html)
-        // Si l'URL finit par "/", on considère que c'est la page par défaut (index.html ou landingPage.html)
-        let currentPage = window.location.pathname.split("/").pop();
-        
-        if (currentPage === "" || currentPage === "landingPage.html") {
-            currentPage = "landingPage.html";
+    /* ── Navbar scroll ── */
+    var navbar = document.getElementById('navbar');
+
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
         }
-
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        navLinks.forEach(link => {
-            const linkHref = link.getAttribute('href');
-
-            // 2. Si le lien correspond à la page actuelle
-            if (linkHref === currentPage) {
-                link.classList.add('text-[#3A3DFF]', 'border-b-2', 'border-[#3A3DFF]');
-                link.classList.remove('text-white');
-            } else {
-                link.classList.add('text-white');
-                link.classList.remove('text-[#3A3DFF]', 'border-b-2', 'border-[#3A3DFF]');
-            }
-        });
-    }
-    const navbar = document.getElementById("navbar");
-
-        window.addEventListener("scroll", () => {
-
-    if (window.scrollY > 50) {
-        navbar.classList.add("bg-white","text-black","backdrop-blur-md","shadow-lg","top-0");
-    } else {
-        navbar.classList.remove("bg-white","text-black","backdrop-blur-md","shadow-lg","top-0");
-    }
-
-});
-
-    // Exécuter dès que le document est prêt
-    document.addEventListener('DOMContentLoaded', setActiveLink);
-    const burgerBtn = document.getElementById('burger-btn');
-    const burgerIcon = document.getElementById('burger-icon');
-    const mobileMenu = document.getElementById('mobile-menu');
-    let isOpen = false;
-
-    burgerBtn.addEventListener('click', () => {
-        isOpen = !isOpen;
-        mobileMenu.style.maxHeight = isOpen ? mobileMenu.scrollHeight + 'px' : '0';
-        mobileMenu.setAttribute('aria-hidden', !isOpen);
-        burgerBtn.setAttribute('aria-expanded', isOpen);
-        burgerIcon.classList.toggle('fa-bars', !isOpen);
-        burgerIcon.classList.toggle('fa-xmark', isOpen);
     });
 
-    mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            isOpen = false;
-            mobileMenu.style.maxHeight = '0';
-            mobileMenu.setAttribute('aria-hidden', 'true');
-            burgerBtn.setAttribute('aria-expanded', 'false');
-            burgerIcon.classList.replace('fa-xmark', 'fa-bars');
-        });
+    /* ── Burger menu ── */
+    var burgerBtn  = document.getElementById('burger-btn');
+    var mobileMenu = document.getElementById('mobile-menu');
+    var iconBars   = document.getElementById('icon-bars');
+    var iconX      = document.getElementById('icon-x');
+    var isOpen     = false;
+
+    function openMenu() {
+        isOpen = true;
+        mobileMenu.classList.add('open');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        burgerBtn.setAttribute('aria-expanded', 'true');
+        iconBars.classList.add('hidden');
+        iconX.classList.remove('hidden');
+    }
+
+    function closeMenu() {
+        isOpen = false;
+        mobileMenu.classList.remove('open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        burgerBtn.setAttribute('aria-expanded', 'false');
+        iconBars.classList.remove('hidden');
+        iconX.classList.add('hidden');
+    }
+
+    burgerBtn.addEventListener('click', function () {
+        if (isOpen) { closeMenu(); } else { openMenu(); }
     });
 
+    /* Fermer le menu quand on clique sur un lien mobile */
+    var mobileLinks = document.querySelectorAll('.mobile-link');
+    mobileLinks.forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+    });
+
+    /* Fermer le menu si on clique en dehors */
+    document.addEventListener('click', function (e) {
+        if (isOpen && !navbar.contains(e.target)) {
+            closeMenu();
+        }
+    });
 </script>
+
 </body>
 </html>
